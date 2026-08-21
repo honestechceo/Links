@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Honestech Mobile Mechanic — Links</title>
+<meta name="description" content="Honestech Mobile Mechanic — we come to you. Call, text, or book a service.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow">
+<!-- ============================================================
+  EDIT ME: business info + links live in one place below.
+============================================================= -->
+<script>
+  window.HONESTECH = {
+    phoneDisplay: "(732) 937-3734",
+    phoneTel: "+17329373734",
+    smsTel: "+17329373734",
+    aiTel: "+18483750431",
+    aiDisplay: "(848) 375-0431",
+    googleReviewUrl: "https://www.google.com/search?client=safari&hs=tHUq&sca_esv=b0ffd84ea5b64405&channel=iphone_bm&sxsrf=APpeQntP1Tkyb5Z7nd8znzWwTgol9Kt6PA:1787334261879&q=honestech+mobile+mechanic+service+south+river+reviews&uds=AJ5uw1_pwztA0BbqeBZDfMwfcmwN0s4RW3P6JuPcjYtwpHGnFmX42qF_xBj4wje_HdG_rBjPfkb6ZoSHTg3z_HhT8ownddTxsSmLGvcaJ1yYdlwpfnj2Jyr57XH973A-UjS1psdvGcpzMTcXASoItzWDJnc0WxQjjJ0AD1pAg6qN3lVqPZb8rt0CbK6fgJ281N-NhNqhJ-Hmu0yAhVazEz2MSFrdtdvAlUPXbJ2zfP3NpscOc9P_g9-LzRPzg2DCxitAB0zd5bpRbJfFtzzHZ-uXMclm4YPZr-DnvIGkis_ygNJsthq9TLro6fTiWg5bzgw1Ci9-nZvJl8wlMa596cLSCkGYAvdONthsPRxcgSmgpGEXSLRLNwA3rYymTNCL4O8b7LDidKBzk7eCeHcxSTiTdE2A_iI4qXdEugKIyy_EqTgWfHbgTgJ_-xmEGeROU1t-PdZ6B2_IQj9vXsyvnT8flTP-nHpRSOsijoqd6L04SILhBa2wwn0exDPMlv7cZ6CjxfWeXfgDZ3uX1jyXcZJAFPCYXFXPaXvK7v40bnk-s2D-OOsdH0Ddlr6_y1KJlf6CDnROsqZD&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_6frfT8UOKWFQEpNNSU1c2J-bPzvT_PCxKYK6OhmccxIsgmxaLiAMXIQuMMcCqStJ1bQNpYOnxEgcGhkaGQJTh6xfiS8jksqATuPX4cgE0BtPNBEahlBWkuogI0ZGfrFqxd4Fl8%3D&sa=X&ved=2ahUKEwiltZj-orKWAxWAFlkFHR86AuMQk8gLegQIHRAB&ictx=1&biw=440&bih=742&dpr=3",
+    facebookUrl: "https://www.facebook.com/share/1DKwj73Skz/?mibextid=wwXIfr",
+    instagramUrl: "https://www.instagram.com/honestech_service?igsi=cnkwNzdvZmV2b3pm",
+    hoursText: "MON–SAT 08:00–17:00 · SUN CLOSED",
+    openDays: [1,2,3,4,5,6],
+    openHour: 8,
+    closeHour: 17
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0A0D0C;
+    --panel:#0F1513;
+    --grid:#1C2523;
+    --phosphor:#39FFB0;
+    --phosphor-dim:#1F8F63;
+    --amber:#FFB020;
+    --alert:#FF4D4D;
+    --text:#DCEFE7;
+    --text-dim:#6C8B80;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(57,255,176,0.06), transparent 55%),
+      var(--bg);
+    min-height:100vh;
+    display:flex; justify-content:center; align-items:flex-start;
+    padding:44px 16px 70px;
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--text);
+  }
+
+  .screen-wrap{ width:100%; max-width:440px; }
+
+  .bezel{
+    background:linear-gradient(155deg,#181f1d,#0c1210);
+    border-radius:14px;
+    padding:8px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .screen{
+    position:relative;
+    background:var(--panel);
+    border-radius:8px;
+    overflow:hidden;
+    padding:22px 18px 20px;
+    background-image:
+      linear-gradient(var(--panel),var(--panel)),
+      repeating-linear-gradient(180deg, rgba(57,255,176,0.025) 0 1px, transparent 1px 3px);
+  }
+  /* scanline sweep, plays once on load */
+  .screen::before{
+    content:"";
+    position:absolute; left:0; right:0; top:0;
+    height:40%;
+    background:linear-gradient(180deg, rgba(57,255,176,0.10), transparent);
+    animation:sweep 1.4s ease-out 1;
+    pointer-events:none;
+  }
+  @keyframes sweep{
+    from{ transform:translateY(-100%); }
+    to{ transform:translateY(250%); }
+  }
+  @media (prefers-reduced-motion: reduce){ .screen::before{ animation:none; } }
+
+  .topbar{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:10.5px; letter-spacing:0.08em;
+    color:var(--text-dim);
+    border-bottom:1px solid var(--grid);
+    padding-bottom:10px; margin-bottom:16px;
+  }
+  .topbar .live{ display:flex; align-items:center; gap:6px; color:var(--phosphor); }
+  .led{ width:6px; height:6px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 6px var(--phosphor); animation:blink 1.8s infinite; }
+  .led.off{ background:var(--alert); box-shadow:0 0 6px var(--alert); animation:none; }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  @media (prefers-reduced-motion: reduce){ .led{ animation:none; } }
+
+  .brand{ margin-bottom:4px; }
+  .brand .name{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:clamp(24px,6.5vw,28px);
+    letter-spacing:0.01em;
+    color:var(--text);
+    line-height:1.1;
+  }
+  .brand .name em{ color:var(--phosphor); font-style:normal; }
+  .brand .sub{
+    font-size:11.5px; color:var(--text-dim); margin-top:4px;
+  }
+
+  .readout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--grid);
+    border:1px solid var(--grid);
+    border-radius:4px;
+    margin:16px 0 18px;
+    overflow:hidden;
+  }
+  .cell{ background:var(--panel); padding:9px 10px; }
+  .cell .k{ font-size:9px; color:var(--text-dim); letter-spacing:0.08em; display:block; }
+  .cell .v{ font-size:12px; color:var(--phosphor); margin-top:2px; display:block; }
+  .cell .v.amber{ color:var(--amber); }
+
+  .links{ display:flex; flex-direction:column; gap:8px; }
+
+  .row{
+    display:flex; align-items:center; gap:12px;
+    text-decoration:none; color:var(--text);
+    background:#0C1210;
+    border:1px solid var(--grid);
+    border-radius:4px;
+    padding:12px 13px;
+    transition:border-color .15s ease, background .15s ease, transform .15s ease;
+  }
+  .row:hover, .row:focus-visible{
+    border-color:var(--phosphor-dim);
+    background:#0F1815;
+    transform:translateX(2px);
+    outline:none;
+  }
+  .row.primary{ border-color:var(--phosphor-dim); background:#0D1A15; }
+  .row.primary:hover{ border-color:var(--phosphor); }
+
+  .code{
+    font-size:10px; color:var(--text-dim);
+    min-width:44px; flex-shrink:0;
+  }
+  .row.primary .code{ color:var(--phosphor-dim); }
+
+  .rlabel{ flex:1; min-width:0; font-family:'Space Grotesk',sans-serif; }
+  .rlabel .l{ font-size:14px; font-weight:600; display:block; }
+  .rlabel .s{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-dim); display:block; margin-top:2px; }
+
+  .chevron{ color:var(--text-dim); font-size:13px; flex-shrink:0; transition:transform .15s ease, color .15s ease; }
+  .row:hover .chevron{ color:var(--phosphor); transform:translateX(3px); }
+
+  .note{
+    font-size:10px; color:var(--text-dim); text-align:center;
+    margin:2px 0 12px; line-height:1.5;
+  }
+
+  .area-block{
+    border:1px solid var(--grid); border-radius:4px;
+    padding:12px 13px; margin-bottom:8px;
+  }
+  .area-block .code{ display:block; margin-bottom:6px; }
+  .area-line{ font-size:11.5px; color:var(--text); margin:2px 0; line-height:1.5; }
+  .area-line .tag{ color:var(--phosphor); font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:11px; }
+  .area-line .tag.amber{ color:var(--amber); }
+
+  .footline{
+    text-align:center; font-size:9.5px; letter-spacing:0.1em;
+    color:var(--text-dim); margin-top:16px;
+  }
+
+  @media (max-width:380px){
+    .screen{ padding:18px 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen-wrap">
+  <div class="bezel">
+    <div class="screen">
+      <div class="topbar">
+        <span>HONESTECH · DIAG LINK v1</span>
+        <span class="live"><span class="led" id="status-led"></span><span id="status-text">ONLINE</span></span>
+      </div>
+
+      <div class="brand">
+        <div class="name">Honestech<br><em>Mobile Mechanic</em></div>
+        <div class="sub">We come to you — diagnostics &amp; repair, on-site.</div>
+      </div>
+
+      <div class="readout">
+        <div class="cell">
+          <span class="k">STATUS</span>
+          <span class="v" id="status-cell">CHECKING…</span>
+        </div>
+        <div class="cell">
+          <span class="k">HOURS</span>
+          <span class="v">MON–SAT 8–5</span>
+        </div>
+      </div>
+
+      <div class="links">
+        <a class="row primary" id="link-call" href="#">
+          <span class="code">CALL</span>
+          <span class="rlabel"><span class="l">Call now</span><span class="s" id="phone-sub">(732) 937-3734</span></span>
+          <span class="chevron">›</span>
+        </a>
+
+        <a class="row" id="link-text" href="#">
+          <span class="code">TEXT</span>
+          <span class="rlabel"><span class="l">Text us directly</span><span class="s" id="text-sub">(732) 937-3734</span></span>
+          <span class="chevron">›</span>
+        </a>
+
+        <a class="row" id="link-book" href="#">
+          <span class="code">AI-Q</span>
+          <span class="rlabel"><span class="l">Get a quote / book</span><span class="s" id="ai-sub">Text (848) 375-0431 · AI-assisted</span></span>
+          <span class="chevron">›</span>
+        </a>
+        <p class="note">Submitting a request online? Check your spam folder for our reply.</p>
+
+        <a class="row" id="link-review" href="#" target="_blank" rel="noopener">
+          <span class="code">RVW</span>
+          <span class="rlabel"><span class="l">Leave a Google review</span><span class="s">Tell the next customer how it went</span></span>
+          <span class="chevron">›</span>
+        </a>
+
+        <a class="row" id="link-fb" href="#" target="_blank" rel="noopener">
+          <span class="code">FB</span>
+          <span class="rlabel"><span class="l">Facebook</span><span class="s">Photos from the bay &amp; updates</span></span>
+          <span class="chevron">›</span>
+        </a>
+
+        <a class="row" id="link-ig" href="#" target="_blank" rel="noopener">
+          <span class="code">IG</span>
+          <span class="rlabel"><span class="l">Instagram</span><span class="s">Before / after jobs</span></span>
+          <span class="chevron">›</span>
+        </a>
+
+        <div class="area-block">
+          <span class="code">AREA</span>
+          <div class="area-line"><span class="tag">● ACTIVE</span> — Middlesex County</div>
+          <div class="area-line"><span class="tag amber">● LIMITED</span> — Monmouth &amp; Ocean County, subject to availability, may be referred to a nearby mechanic</div>
+        </div>
+      </div>
+
+      <div class="footline">HONESTECHMOBILEMECHANIC.COM</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const C = window.HONESTECH;
+
+  document.getElementById('link-call').href = 'tel:' + C.phoneTel;
+  document.getElementById('phone-sub').textContent = C.phoneDisplay;
+  document.getElementById('link-text').href = 'sms:' + C.smsTel;
+  document.getElementById('text-sub').textContent = C.phoneDisplay;
+  document.getElementById('link-book').href = 'sms:' + C.aiTel;
+  document.getElementById('ai-sub').textContent = 'Text ' + C.aiDisplay + ' · AI-assisted';
+  document.getElementById('link-review').href = C.googleReviewUrl;
+  document.getElementById('link-fb').href = C.facebookUrl;
+  document.getElementById('link-ig').href = C.instagramUrl;
+
+  // Live open/closed status
+  (function(){
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours() + now.getMinutes()/60;
+    const isOpen = C.openDays.includes(day) && hour >= C.openHour && hour < C.closeHour;
+
+    const led = document.getElementById('status-led');
+    const topText = document.getElementById('status-text');
+    const cell = document.getElementById('status-cell');
+
+    if(isOpen){
+      topText.textContent = 'ONLINE';
+      cell.textContent = 'OPEN NOW';
+    } else {
+      led.classList.add('off');
+      topText.textContent = 'OFFLINE';
+      cell.textContent = 'CLOSED';
+      cell.classList.add('amber');
+    }
+  })();
+</script>
+
+</body>
+</html>
