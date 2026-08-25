@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspection Tool — Honestech Mobile Mechanic</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F4F5F7;
+    --card:#FFFFFF;
+    --border:#E2E4E8;
+    --text:#14171A;
+    --dim:#6B7280;
+    --brand:#F5C800;
+    --good:#16A34A;
+    --good-bg:#EAFBEF;
+    --attn:#D97706;
+    --attn-bg:#FFF6E6;
+    --fail:#DC2626;
+    --fail-bg:#FDEDED;
+    --na:#8B90A0;
+    --na-bg:#F0F1F4;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; height:100%;}
+  html{ background:var(--bg); }
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding-bottom:60px;
+    min-height:100vh;
+  }
+
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px; }
+
+  /* ---- sticky progress bar ---- */
+  .stickybar{
+    position:sticky; top:0; z-index:10;
+    background:rgba(244,245,247,0.92);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+    padding:8px 14px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono',monospace; font-size:11px;
+  }
+  .stickybar .tallies{ display:flex; gap:10px; }
+  .stickybar .t{ display:flex; align-items:center; gap:4px; }
+  .stickybar .dot{ width:7px; height:7px; border-radius:50%; }
+  .stickybar .dot.good{ background:var(--good); }
+  .stickybar .dot.attn{ background:var(--attn); }
+  .stickybar .dot.fail{ background:var(--fail); }
+  .stickybar .dot.na{ background:var(--na); }
+  .stickybar .completed{ color:var(--dim); }
+
+  header{ text-align:center; padding:20px 14px 14px; }
+  header h1{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; margin:0 0 3px; }
+  header h1 span{ color:var(--brand); background:#1A1B1D; padding:1px 6px; border-radius:3px; }
+  header .sub{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--dim); letter-spacing:0.05em; text-transform:uppercase; }
+
+  fieldset{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:14px 14px 16px; margin:0 0 12px;
+  }
+  fieldset{ min-width:0; }
+  .legend{
+    display:flex; align-items:center; justify-content:space-between; width:100%;
+    padding:0 2px 10px; margin:0; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14.5px;
+  }
+  .legend .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; border-radius:5px; background:var(--brand);
+    color:#111; font-size:11px; font-weight:700; margin-right:8px; flex-shrink:0;
+  }
+  .legend .sec-tally{ font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:10.5px; color:var(--dim); }
+
+  label{ display:block; font-size:11.5px; color:var(--dim); margin-bottom:4px; }
+  input[type="text"], input[type="date"], input[type="tel"], input[type="number"], textarea, select{
+    width:100%; background:#FAFAFB; border:1px solid var(--border); border-radius:6px;
+    color:var(--text); font-family:'Inter',sans-serif; font-size:14px;
+    padding:9px 10px; margin-bottom:10px;
+  }
+  input:focus, textarea:focus, select:focus{ outline:2px solid var(--brand); outline-offset:-1px; }
+  textarea{ resize:vertical; min-height:44px; }
+
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .grid4{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+
+  /* ---- quick select row ---- */
+  .quick-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .quick-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.03em;
+    padding:5px 9px; border-radius:5px; border:1px solid var(--border);
+    background:#FAFAFB; color:var(--dim); cursor:pointer;
+  }
+  .quick-btn:hover{ border-color:#c7cad0; }
+  .quick-btn.clear{ color:var(--fail); border-color:#f3c9c9; }
+
+  /* ---- checklist item ---- */
+  .check-item{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:8px 2px; border-top:1px solid #F0F1F3;
+  }
+  .check-item:first-of-type{ border-top:none; }
+  .check-item .name{ font-size:13px; flex:1; min-width:0; line-height:1.35; }
+
+  .btn-group{ display:flex; gap:4px; flex-shrink:0; }
+  .state-btn{
+    width:30px; height:26px; border-radius:5px; border:1px solid var(--border);
+    background:#FAFAFB; font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600;
+    color:var(--dim); cursor:pointer;
+  }
+  .state-btn[data-state="good"].active{ background:var(--good); border-color:var(--good); color:#fff; }
+  .state-btn[data-state="attn"].active{ background:var(--attn); border-color:var(--attn); color:#fff; }
+  .state-btn[data-state="fail"].active{ background:var(--fail); border-color:var(--fail); color:#fff; }
+  .state-btn[data-state="na"].active{ background:var(--na); border-color:var(--na); color:#fff; }
+
+  .measurements{ margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); }
+  .measurements .m-label{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.06em; color:var(--dim); text-transform:uppercase; margin-bottom:6px; }
+
+  /* ---- photos ---- */
+  .photo-cat{ margin-bottom:10px; }
+  .photo-cat-name{ font-size:12.5px; font-weight:600; margin-bottom:6px; }
+  .photo-input-btn{
+    display:inline-block; font-size:12px; padding:8px 12px; border-radius:6px;
+    border:1px dashed #c7cad0; color:var(--dim); cursor:pointer; background:#FAFAFB;
+  }
+  .thumbs{ display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+  .thumbs img{ width:52px; height:52px; object-fit:cover; border-radius:5px; border:1px solid var(--border); }
+
+  /* ---- OBD codes ---- */
+  .code-row{ display:grid; grid-template-columns:90px 1fr 30px; gap:6px; margin-bottom:6px; align-items:center; }
+  .code-row input{ margin-bottom:0; }
+  .code-remove{ background:none; border:none; color:var(--fail); font-size:16px; cursor:pointer; }
+  .add-code-btn{
+    font-size:12px; padding:7px 12px; border-radius:6px; border:1px solid var(--border);
+    background:#FAFAFB; color:var(--text); cursor:pointer; margin-top:2px;
+  }
+
+  /* ---- overall summary ---- */
+  .tally-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
+  .tally-card{ text-align:center; padding:10px 4px; border-radius:8px; }
+  .tally-card .n{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; }
+  .tally-card .l{ font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase; margin-top:2px; }
+  .tally-card.good{ background:var(--good-bg); color:var(--good); }
+  .tally-card.attn{ background:var(--attn-bg); color:var(--attn); }
+  .tally-card.fail{ background:var(--fail-bg); color:var(--fail); }
+  .tally-card.na{ background:var(--na-bg); color:var(--na); }
+
+  /* ---- actions ---- */
+  .actions{ display:flex; gap:10px; margin-top:16px; }
+  .btn{
+    flex:1; text-align:center; font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:13.5px; padding:13px; border-radius:8px; cursor:pointer; border:none;
+  }
+  .btn-submit{ background:#14171A; color:#fff; }
+  .btn-view{ background:var(--brand); color:#14171A; }
+  .btn-reset{ background:transparent; border:1px solid var(--fail); color:var(--fail); }
+
+  .toast{
+    position:fixed; left:50%; bottom:20px; transform:translateX(-50%) translateY(20px);
+    background:#14171A; color:#fff; padding:10px 18px; border-radius:8px;
+    font-size:13px; opacity:0; transition:all .25s ease; pointer-events:none; z-index:50;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ---- report view ---- */
+  #report-view{ display:none; }
+  #report-view.show{ display:block; }
+  #form-view.hide{ display:none; }
+  .report-head{ text-align:center; margin-bottom:16px; }
+  .report-row{ display:flex; justify-content:space-between; font-size:13px; padding:5px 0; border-bottom:1px solid #F0F1F3; }
+  .flagged-item{ font-size:13px; padding:6px 0; border-bottom:1px solid #F0F1F3; }
+  .flagged-item .st{ font-weight:700; font-size:10.5px; text-transform:uppercase; margin-right:6px; }
+  .flagged-item .st.attn{ color:var(--attn); }
+  .flagged-item .st.fail{ color:var(--fail); }
+
+  @media (max-width:420px){
+    .grid3{ grid-template-columns:1fr 1fr; }
+    .grid4{ grid-template-columns:1fr 1fr; }
+  }
+
+  @media print{
+    .stickybar, .actions, .toast, .quick-row, .btn{ display:none !important; }
+    body{ background:#fff; }
+    fieldset{ break-inside:avoid; border:1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stickybar">
+  <span class="completed" id="completed-count">0/0 items</span>
+  <div class="tallies">
+    <span class="t"><span class="dot good"></span><span id="tb-good">0</span></span>
+    <span class="t"><span class="dot attn"></span><span id="tb-attn">0</span></span>
+    <span class="t"><span class="dot fail"></span><span id="tb-fail">0</span></span>
+    <span class="t"><span class="dot na"></span><span id="tb-na">0</span></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <h1><span>Honestech</span> Inspection</h1>
+    <div class="sub">Pre-Purchase Inspection · Field Tool</div>
+  </header>
+
+  <div id="form-view">
+    <form id="ppi-form" onsubmit="return false;">
+
+      <fieldset>
+        <div class="legend"><span><span class="num">01</span>Customer &amp; Vehicle</span></div>
+        <div class="grid2">
+          <div><label>Inspection date</label><input type="date" id="f-date"></div>
+          <div><label>Inspection location</label><input type="text" id="f-location"></div>
+        </div>
+        <div class="grid2">
+          <div><label>Customer name</label><input type="text" id="f-customer"></div>
+          <div><label>Customer phone</label><input type="tel" id="f-phone"></div>
+        </div>
+        <div class="grid4">
+          <div><label>Year</label><input type="text" id="f-year"></div>
+          <div><label>Make</label><input type="text" id="f-make"></div>
+          <div><label>Model</label><input type="text" id="f-model"></div>
+          <div><label>Trim</label><input type="text" id="f-trim"></div>
+        </div>
+        <div class="grid3">
+          <div><label>VIN</label><input type="text" id="f-vin"></div>
+          <div><label>Odometer (mi)</label><input type="text" id="f-odo"></div>
+          <div><label>Plate</label><input type="text" id="f-plate"></div>
+        </div>
+      </fieldset>
+
+      <div id="sections-container"></div>
+
+      <fieldset>
+        <div class="legend"><span><span class="num">12</span>OBD-II Scan</span></div>
+        <label>Scan status</label>
+        <select id="obd-status">
+          <option value="">— Select —</option>
+          <option>No codes — all monitors ready</option>
+          <option>No codes — monitors not ready</option>
+          <option>Codes present</option>
+          <option>Pending codes only</option>
+          <option>Unable to scan</option>
+        </select>
+        <label>Diagnostic trouble codes</label>
+        <div id="code-rows"></div>
+        <button type="button" class="add-code-btn" id="add-code-btn">+ Add Code</button>
+        <label style="margin-top:10px;">OBD notes</label>
+        <textarea id="obd-notes" placeholder="Freeze frame data, monitor status, etc."></textarea>
+      </fieldset>
+
+      <fieldset>
+        <div class="legend"><span><span class="num">13</span>Photos <span class="sec-tally" id="photo-count">0 photos</span></span></div>
+        <div class="photo-cat">
+          <div class="photo-cat-name">Damage</div>
+          <label class="photo-input-btn">Tap to add photos<input type="file" accept="image/*" capture="environment" multiple data-cat="damage" style="display:none;"></label>
+          <div class="thumbs" data-thumbs="damage"></div>
+        </div>
+        <div class="photo-cat">
+          <div class="photo-cat-name">VIN</div>
+          <label class="photo-input-btn">Tap to add photos<input type="file" accept="image/*" capture="environment" multiple data-cat="vin" style="display:none;"></label>
+          <div class="thumbs" data-thumbs="vin"></div>
+        </div>
+        <div class="photo-cat">
+          <div class="photo-cat-name">Odometer</div>
+          <label class="photo-input-btn">Tap to add photos<input type="file" accept="image/*" capture="environment" multiple data-cat="odometer" style="display:none;"></label>
+          <div class="thumbs" data-thumbs="odometer"></div>
+        </div>
+        <div class="photo-cat">
+          <div class="photo-cat-name">Tires</div>
+          <label class="photo-input-btn">Tap to add photos<input type="file" accept="image/*" capture="environment" multiple data-cat="tires" style="display:none;"></label>
+          <div class="thumbs" data-thumbs="tires"></div>
+        </div>
+        <div class="photo-cat">
+          <div class="photo-cat-name">Codes</div>
+          <label class="photo-input-btn">Tap to add photos<input type="file" accept="image/*" capture="environment" multiple data-cat="codes" style="display:none;"></label>
+          <div class="thumbs" data-thumbs="codes"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="legend"><span><span class="num">14</span>Overall Assessment</span></div>
+        <div class="tally-grid">
+          <div class="tally-card good"><div class="n" id="ov-good">0</div><div class="l">Good</div></div>
+          <div class="tally-card attn"><div class="n" id="ov-attn">0</div><div class="l">Attn</div></div>
+          <div class="tally-card fail"><div class="n" id="ov-fail">0</div><div class="l">Fail</div></div>
+          <div class="tally-card na"><div class="n" id="ov-na">0</div><div class="l">N/A</div></div>
+        </div>
+        <label>Recommendation</label>
+        <select id="f-recommend">
+          <option value="">— Select —</option>
+          <option>Buy — solid vehicle</option>
+          <option>Buy with negotiation on listed issues</option>
+          <option>Buy only after seller addresses items</option>
+          <option>Pass — too many issues</option>
+          <option>Pass — safety concerns</option>
+        </select>
+        <label>Estimated repair cost</label>
+        <input type="text" id="f-repaircost" placeholder="e.g. $400–$650">
+        <label>Inspector notes</label>
+        <textarea id="f-notes" placeholder="Overall summary for the customer"></textarea>
+        <div class="grid2">
+          <div><label>Inspector name</label><input type="text" id="f-inspector"></div>
+          <div><label>Signature</label><input type="text" id="f-signature"></div>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" class="btn btn-submit" id="submit-btn">Submit Inspection</button>
+        <button type="button" class="btn btn-view" id="view-btn">View Report</button>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-reset" id="reset-btn" style="flex:none; width:100%;">Reset Form</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="report-view">
+    <div class="report-head">
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:19px;margin:0 0 4px;">Inspection Report</h1>
+      <div class="sub" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);" id="report-date-line"></div>
+    </div>
+    <div id="report-body"></div>
+    <div class="actions">
+      <button type="button" class="btn btn-view" onclick="window.print()">Print / Save as PDF</button>
+      <button type="button" class="btn btn-submit" id="back-btn">Back to Form</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SECTIONS = [
+    { id:'exterior', num:'02', title:'Exterior & Body', items:[
+      'Body panels — dents/scratches','Paint condition / mismatched panels','Rust (visible, body)',
+      'Glass — windshield & windows','Headlights / taillights','Mirrors',
+      'Door operation & alignment','Hood & trunk operation','Bumpers / trim' ] },
+    { id:'interior', num:'03', title:'Interior', items:[
+      'Seats — wear / damage','Seatbelts — operation & condition','Dashboard warning lights',
+      'HVAC — heat','HVAC — A/C','Power windows','Power locks','Radio / infotainment',
+      'Carpet / headliner / odors','Sunroof / moonroof (if equipped)' ] },
+    { id:'engine', num:'04', title:'Engine', items:[
+      'Cold start behavior','Idle quality','Unusual noises (knocks/ticks)','Visible leaks (oil, coolant)',
+      'Belts — condition','Hoses — condition','Air filter','Engine mounts','Smoke from exhaust' ] },
+    { id:'fluids', num:'05', title:'Fluids', items:[
+      'Engine oil — level & condition','Coolant — level & condition','Transmission fluid — level & condition',
+      'Brake fluid — level & condition','Power steering fluid','Differential / transfer case (if applicable)',
+      'Windshield washer fluid' ] },
+    { id:'brakes', num:'06', title:'Brakes', items:[
+      'Brake pedal feel','Front pads — thickness','Rear pads / shoes — thickness','Front rotors — condition',
+      'Rear rotors / drums — condition','Brake lines / hoses','Parking brake operation','ABS warning light' ],
+      measurements:[
+        {label:'Front pad thickness (mm)', id:'m-brake-fpad'},
+        {label:'Rear pad thickness (mm)', id:'m-brake-rpad'},
+        {label:'Front rotor condition', id:'m-brake-frotor'},
+        {label:'Rear rotor condition', id:'m-brake-rrotor'} ] },
+    { id:'suspension', num:'07', title:'Suspension & Steering', items:[
+      'Shocks / struts','Springs','Control arms / bushings','Ball joints','Tie rod ends',
+      'Sway bar links','CV axles / boots','Steering response & centering','Wheel bearings' ] },
+    { id:'tires', num:'08', title:'Tires & Wheels', items:[
+      'Tread depth (overall)','Even wear pattern','Sidewall — cracks/bulges','Tire age (DOT date)',
+      'Spare tire / kit','Wheels — damage / curb rash','Lug nuts present & tight' ],
+      measurements:[
+        {label:'LF tread (32nds)', id:'m-tire-lf'}, {label:'RF tread (32nds)', id:'m-tire-rf'},
+        {label:'LR tread (32nds)', id:'m-tire-lr'}, {label:'RR tread (32nds)', id:'m-tire-rr'},
+        {label:'Tire brand / size / DOT', id:'m-tire-info', full:true} ] },
+    { id:'electrical', num:'09', title:'Electrical', items:[
+      'Battery condition / terminals','Starter operation','Alternator charging','All exterior lights working',
+      'All interior lights working','Horn','Wipers (front / rear)','Backup camera (if equipped)' ],
+      measurements:[
+        {label:'Battery voltage (resting)', id:'m-elec-vres'}, {label:'Cranking voltage', id:'m-elec-vcrank'},
+        {label:'Alternator output', id:'m-elec-alt'}, {label:'Battery date / CCA', id:'m-elec-batt'} ] },
+    { id:'safety', num:'10', title:'Safety Inspection', items:[
+      'Airbag warning light','Seatbelt pretensioners','Brake lights operation','Turn signals / hazards',
+      'Tire pressure monitoring (TPMS)','Emergency / parking brake','Wiper blade condition',
+      'State inspection sticker (if required)' ] },
+    { id:'undercarriage', num:'11', title:'Undercarriage & Frame', items:[
+      'Frame — rust / damage','Subframe — condition','Floor pans','Exhaust system — leaks/damage',
+      'Catalytic converter present','Heat shields','Skid plates / underbody panels','Fuel tank / lines' ] },
+  ];
+
+  // EDIT ME: paste your deployed Google Apps Script Web App URL here
+  const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycby-e92sR-7z2ptctHDHKskScjkJSlFoBt3B74AqaOc0-2ICh-MM6p6GJVIuKv6eLDY/exec";
+
+  const state = {}; // itemKey -> 'good'|'attn'|'fail'|'na'
+  const photos = { damage:[], vin:[], odometer:[], tires:[], codes:[] };
+  let codeRowCount = 0;
+
+  const container = document.getElementById('sections-container');
+
+  SECTIONS.forEach(sec => {
+    const fs = document.createElement('fieldset');
+
+    const legend = document.createElement('div');
+    legend.className = 'legend';
+    legend.innerHTML = `<span><span class="num">${sec.num}</span>${sec.title}</span><span class="sec-tally" data-sec-tally="${sec.id}">0/${sec.items.length}</span>`;
+    fs.appendChild(legend);
+
+    const quickRow = document.createElement('div');
+    quickRow.className = 'quick-row';
+    quickRow.innerHTML = `
+      <button type="button" class="quick-btn" data-quick="good" data-sec="${sec.id}">All Good</button>
+      <button type="button" class="quick-btn" data-quick="attn" data-sec="${sec.id}">All Attn</button>
+      <button type="button" class="quick-btn" data-quick="fail" data-sec="${sec.id}">All Fail</button>
+      <button type="button" class="quick-btn" data-quick="na" data-sec="${sec.id}">All N/A</button>
+      <button type="button" class="quick-btn clear" data-quick="clear" data-sec="${sec.id}">Clear</button>
+    `;
+    fs.appendChild(quickRow);
+
+    sec.items.forEach((itemName, i) => {
+      const key = sec.id + '-' + i;
+      const row = document.createElement('div');
+      row.className = 'check-item';
+      row.innerHTML = `
+        <span class="name">${itemName}</span>
+        <div class="btn-group" data-item="${key}" data-sec="${sec.id}">
+          <button type="button" class="state-btn" data-state="good">G</button>
+          <button type="button" class="state-btn" data-state="attn">A</button>
+          <button type="button" class="state-btn" data-state="fail">F</button>
+          <button type="button" class="state-btn" data-state="na">N</button>
+        </div>
+      `;
+      fs.appendChild(row);
+    });
+
+    if (sec.measurements) {
+      const mWrap = document.createElement('div');
+      mWrap.className = 'measurements';
+      mWrap.innerHTML = '<div class="m-label">Measurements</div>';
+      const mGrid = document.createElement('div');
+      mGrid.className = 'grid2';
+      sec.measurements.forEach(m => {
+        const d = document.createElement('div');
+        if (m.full) d.style.gridColumn = '1 / -1';
+        d.innerHTML = `<label>${m.label}</label><input type="text" id="${m.id}">`;
+        mGrid.appendChild(d);
+      });
+      mWrap.appendChild(mGrid);
+      fs.appendChild(mWrap);
+    }
+
+    container.appendChild(fs);
+  });
+
+  function setState(key, val){
+    state[key] = val;
+    updateButtons(key);
+    updateTallies();
+  }
+
+  function updateButtons(key){
+    const group = document.querySelector(`.btn-group[data-item="${key}"]`);
+    if(!group) return;
+    group.querySelectorAll('.state-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.state === state[key]);
+    });
+  }
+
+  container.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.state-btn');
+    if(btn){
+      const group = btn.closest('.btn-group');
+      const key = group.dataset.item;
+      const val = btn.dataset.state;
+      setState(key, state[key] === val ? undefined : val);
+      return;
+    }
+    const quick = e.target.closest('.quick-btn');
+    if(quick){
+      const secId = quick.dataset.sec;
+      const secDef = SECTIONS.find(s=>s.id===secId);
+      const val = quick.dataset.quick === 'clear' ? undefined : quick.dataset.quick;
+      secDef.items.forEach((_, i)=> setState(secId+'-'+i, val));
+    }
+  });
+
+  function updateTallies(){
+    let good=0, attn=0, fail=0, na=0, done=0, total=0;
+    SECTIONS.forEach(sec=>{
+      let secDone = 0;
+      sec.items.forEach((_, i)=>{
+        total++;
+        const v = state[sec.id+'-'+i];
+        if(v){ secDone++; done++; }
+        if(v==='good') good++;
+        if(v==='attn') attn++;
+        if(v==='fail') fail++;
+        if(v==='na') na++;
+      });
+      const tallyEl = document.querySelector(`[data-sec-tally="${sec.id}"]`);
+      if(tallyEl) tallyEl.textContent = `${secDone}/${sec.items.length}`;
+    });
+    document.getElementById('tb-good').textContent = good;
+    document.getElementById('tb-attn').textContent = attn;
+    document.getElementById('tb-fail').textContent = fail;
+    document.getElementById('tb-na').textContent = na;
+    document.getElementById('completed-count').textContent = `${done}/${total} items`;
+    document.getElementById('ov-good').textContent = good;
+    document.getElementById('ov-attn').textContent = attn;
+    document.getElementById('ov-fail').textContent = fail;
+    document.getElementById('ov-na').textContent = na;
+  }
+
+  // ---- OBD code rows ----
+  function addCodeRow(code, desc){
+    codeRowCount++;
+    const row = document.createElement('div');
+    row.className = 'code-row';
+    row.innerHTML = `
+      <input type="text" placeholder="P0301" value="${code||''}">
+      <input type="text" placeholder="Description" value="${desc||''}">
+      <button type="button" class="code-remove">×</button>
+    `;
+    row.querySelector('.code-remove').addEventListener('click', ()=> row.remove());
+    document.getElementById('code-rows').appendChild(row);
+  }
+  document.getElementById('add-code-btn').addEventListener('click', ()=> addCodeRow());
+
+  // ---- photos ----
+  document.querySelectorAll('input[type="file"][data-cat]').forEach(input=>{
+    input.addEventListener('change', (e)=>{
+      const cat = input.dataset.cat;
+      const files = Array.from(e.target.files || []);
+      files.forEach(file=>{
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+          photos[cat].push(ev.target.result);
+          renderThumbs(cat);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  });
+  function renderThumbs(cat){
+    const wrap = document.querySelector(`[data-thumbs="${cat}"]`);
+    wrap.innerHTML = photos[cat].map(src=>`<img src="${src}">`).join('');
+    const totalPhotos = Object.values(photos).reduce((a,arr)=>a+arr.length,0);
+    document.getElementById('photo-count').textContent = totalPhotos + ' photos';
+  }
+
+  // ---- reset ----
+  document.getElementById('reset-btn').addEventListener('click', ()=>{
+    if(!confirm('Reset the entire form? This cannot be undone.')) return;
+    document.getElementById('ppi-form').querySelectorAll('input, textarea, select').forEach(el=>{
+      if(el.type === 'file') return;
+      el.value = '';
+    });
+    Object.keys(state).forEach(k=> delete state[k]);
+    document.querySelectorAll('.state-btn.active').forEach(b=>b.classList.remove('active'));
+    Object.keys(photos).forEach(cat=>{ photos[cat]=[]; renderThumbs(cat); });
+    document.getElementById('code-rows').innerHTML='';
+    updateTallies();
+    showToast('Form reset');
+  });
+
+  // ---- toast ----
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=> t.classList.remove('show'), 2200);
+  }
+
+  // ---- submit (saves locally on this device) ----
+  document.getElementById('submit-btn').addEventListener('click', async ()=>{
+    const record = collectData();
+
+    // always keep a local backup on this device
+    try{
+      const key = 'honestech_inspections';
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      existing.push(record);
+      localStorage.setItem(key, JSON.stringify(existing));
+    }catch(err){ /* local backup best-effort only */ }
+
+    if(!GOOGLE_SHEETS_URL){
+      showToast('Saved on this device (Sheets sync not set up yet)');
+      return;
+    }
+
+    try{
+      await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight
+        body: JSON.stringify(record)
+      });
+      showToast('Inspection submitted & synced to Google Sheets');
+    }catch(err){
+      showToast('Saved on this device — Sheets sync failed, check connection');
+    }
+  });
+
+  function collectData(){
+    const val = id => (document.getElementById(id)||{}).value || '';
+    const codes = Array.from(document.querySelectorAll('#code-rows .code-row')).map(r=>{
+      const inputs = r.querySelectorAll('input');
+      return { code: inputs[0].value, desc: inputs[1].value };
+    });
+    return {
+      savedAt: new Date().toISOString(),
+      vehicle: {
+        date: val('f-date'), location: val('f-location'), customer: val('f-customer'), phone: val('f-phone'),
+        year: val('f-year'), make: val('f-make'), model: val('f-model'), trim: val('f-trim'),
+        vin: val('f-vin'), odometer: val('f-odo'), plate: val('f-plate')
+      },
+      checklist: {...state},
+      obd: { status: val('obd-status'), codes, notes: val('obd-notes') },
+      photoCounts: Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.length])),
+      recommendation: val('f-recommend'),
+      repairCost: val('f-repaircost'),
+      notes: val('f-notes'),
+      inspector: val('f-inspector'),
+      signature: val('f-signature')
+    };
+  }
+
+  // ---- view report ----
+  document.getElementById('view-btn').addEventListener('click', ()=>{
+    const d = collectData();
+    const stateLabel = { good:'Good', attn:'Attn', fail:'Fail', na:'N/A' };
+    let flagged = '';
+    SECTIONS.forEach(sec=>{
+      sec.items.forEach((name,i)=>{
+        const v = state[sec.id+'-'+i];
+        if(v==='attn' || v==='fail'){
+          flagged += `<div class="flagged-item"><span class="st ${v}">${stateLabel[v]}</span>${sec.title} — ${name}</div>`;
+        }
+      });
+    });
+    if(!flagged) flagged = '<div class="flagged-item">No Attn/Fail items flagged.</div>';
+
+    const codesHtml = d.obd.codes.filter(c=>c.code).map(c=>`<div class="report-row"><span>${c.code}</span><span>${c.desc||''}</span></div>`).join('') || '<div class="report-row"><span>No codes logged</span><span></span></div>';
+
+    document.getElementById('report-date-line').textContent =
+      (d.vehicle.year||'') + ' ' + (d.vehicle.make||'') + ' ' + (d.vehicle.model||'') + ' · ' + (d.vehicle.date || '');
+
+    document.getElementById('report-body').innerHTML = `
+      <fieldset>
+        <div class="legend"><span>Vehicle</span></div>
+        <div class="report-row"><span>Customer</span><span>${d.vehicle.customer||'—'}</span></div>
+        <div class="report-row"><span>Vehicle</span><span>${d.vehicle.year||''} ${d.vehicle.make||''} ${d.vehicle.model||''} ${d.vehicle.trim||''}</span></div>
+        <div class="report-row"><span>VIN</span><span>${d.vehicle.vin||'—'}</span></div>
+        <div class="report-row"><span>Odometer</span><span>${d.vehicle.odometer||'—'} mi</span></div>
+        <div class="report-row"><span>Location</span><span>${d.vehicle.location||'—'}</span></div>
+      </fieldset>
+      <fieldset>
+        <div class="legend"><span>Summary</span></div>
+        <div class="tally-grid">
+          <div class="tally-card good"><div class="n">${document.getElementById('ov-good').textContent}</div><div class="l">Good</div></div>
+          <div class="tally-card attn"><div class="n">${document.getElementById('ov-attn').textContent}</div><div class="l">Attn</div></div>
+          <div class="tally-card fail"><div class="n">${document.getElementById('ov-fail').textContent}</div><div class="l">Fail</div></div>
+          <div class="tally-card na"><div class="n">${document.getElementById('ov-na').textContent}</div><div class="l">N/A</div></div>
+        </div>
+        <div class="report-row"><span>Recommendation</span><span>${d.recommendation||'—'}</span></div>
+        <div class="report-row"><span>Est. repair cost</span><span>${d.repairCost||'—'}</span></div>
+      </fieldset>
+      <fieldset>
+        <div class="legend"><span>Flagged Items</span></div>
+        ${flagged}
+      </fieldset>
+      <fieldset>
+        <div class="legend"><span>OBD-II</span></div>
+        <div class="report-row"><span>Status</span><span>${d.obd.status||'—'}</span></div>
+        ${codesHtml}
+      </fieldset>
+      <fieldset>
+        <div class="legend"><span>Inspector Notes</span></div>
+        <p style="font-size:13px;line-height:1.5;">${d.notes || 'No additional notes.'}</p>
+        <div class="report-row"><span>Inspector</span><span>${d.inspector||'—'}</span></div>
+        <div class="report-row"><span>Signature</span><span>${d.signature||'—'}</span></div>
+      </fieldset>
+    `;
+
+    document.getElementById('form-view').classList.add('hide');
+    document.getElementById('report-view').classList.add('show');
+    window.scrollTo(0,0);
+  });
+
+  document.getElementById('back-btn').addEventListener('click', ()=>{
+    document.getElementById('report-view').classList.remove('show');
+    document.getElementById('form-view').classList.remove('hide');
+  });
+</script>
+
+</body>
+</html>
