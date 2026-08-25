@@ -566,11 +566,11 @@
   });
 
   // ---- toast ----
-  function showToast(msg){
+  function showToast(msg, linkUrl){
     const t = document.getElementById('toast');
-    t.textContent = msg;
+    t.innerHTML = msg + (linkUrl ? ` — <a href="${linkUrl}" target="_blank" rel="noopener" style="color:#FFD84D;text-decoration:underline;">View PDF</a>` : '');
     t.classList.add('show');
-    setTimeout(()=> t.classList.remove('show'), 2200);
+    setTimeout(()=> t.classList.remove('show'), linkUrl ? 6000 : 2200);
   }
 
   // ---- submit (saves locally on this device) ----
@@ -591,16 +591,37 @@
     }
 
     try{
-      await fetch(GOOGLE_SHEETS_URL, {
+      const res = await fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight
         body: JSON.stringify(record)
       });
-      showToast('Inspection submitted & synced to Google Sheets');
+      let reportUrl = null;
+      try{ const json = await res.json(); reportUrl = json.reportUrl; }catch(_){ /* response unreadable, still likely succeeded */ }
+      showToast('Inspection submitted & synced to Google Sheets', reportUrl);
     }catch(err){
       showToast('Saved on this device — Sheets sync failed, check connection');
     }
   });
+
+  function buildChecklistLines(){
+    const stateLabel = { good:'Good', attn:'Attn', fail:'Fail', na:'N/A' };
+    const lines = [];
+    SECTIONS.forEach(sec=>{
+      lines.push('--- ' + sec.title + ' ---');
+      sec.items.forEach((name,i)=>{
+        const v = state[sec.id+'-'+i];
+        lines.push(name + ': ' + (v ? stateLabel[v] : 'Not checked'));
+      });
+      if(sec.measurements){
+        sec.measurements.forEach(m=>{
+          const val = (document.getElementById(m.id)||{}).value;
+          if(val) lines.push('  ' + m.label + ': ' + val);
+        });
+      }
+    });
+    return lines;
+  }
 
   function collectData(){
     const val = id => (document.getElementById(id)||{}).value || '';
@@ -616,6 +637,7 @@
         vin: val('f-vin'), odometer: val('f-odo'), plate: val('f-plate')
       },
       checklist: {...state},
+      checklistLines: buildChecklistLines(),
       obd: { status: val('obd-status'), codes, notes: val('obd-notes') },
       photoCounts: Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.length])),
       recommendation: val('f-recommend'),
