@@ -180,6 +180,9 @@
   .flagged-item .st{ font-weight:700; font-size:10.5px; text-transform:uppercase; margin-right:6px; }
   .flagged-item .st.attn{ color:var(--attn); }
   .flagged-item .st.fail{ color:var(--fail); }
+  .flagged-item .st.good{ color:var(--good); }
+  .flagged-item .st.na{ color:var(--na); }
+  .flagged-item .st.unchecked{ color:#C4C7CC; }
 
   @media (max-width:420px){
     .grid3{ grid-template-columns:1fr 1fr; }
@@ -627,6 +630,7 @@
   document.getElementById('view-btn').addEventListener('click', ()=>{
     const d = collectData();
     const stateLabel = { good:'Good', attn:'Attn', fail:'Fail', na:'N/A' };
+
     let flagged = '';
     SECTIONS.forEach(sec=>{
       sec.items.forEach((name,i)=>{
@@ -638,7 +642,47 @@
     });
     if(!flagged) flagged = '<div class="flagged-item">No Attn/Fail items flagged.</div>';
 
+    // full itemized checklist, section by section
+    let sectionsHtml = '';
+    SECTIONS.forEach(sec=>{
+      let good=0, attn=0, fail=0, na=0;
+      let itemsHtml = '';
+      sec.items.forEach((name,i)=>{
+        const v = state[sec.id+'-'+i];
+        if(v==='good') good++;
+        if(v==='attn') attn++;
+        if(v==='fail') fail++;
+        if(v==='na') na++;
+        const label = v ? stateLabel[v] : 'Not checked';
+        const cls = v || 'unchecked';
+        itemsHtml += `<div class="flagged-item"><span class="st ${cls}">${label}</span>${name}</div>`;
+      });
+
+      let measureHtml = '';
+      if(sec.measurements){
+        const vals = sec.measurements
+          .map(m => {
+            const v = (document.getElementById(m.id)||{}).value;
+            return v ? `<div class="report-row"><span>${m.label}</span><span>${v}</span></div>` : '';
+          })
+          .join('');
+        if(vals) measureHtml = `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);">${vals}</div>`;
+      }
+
+      sectionsHtml += `
+        <fieldset>
+          <div class="legend"><span>${sec.title}</span><span class="sec-tally">${good}G · ${attn}A · ${fail}F · ${na}N/A</span></div>
+          ${itemsHtml}
+          ${measureHtml}
+        </fieldset>
+      `;
+    });
+
     const codesHtml = d.obd.codes.filter(c=>c.code).map(c=>`<div class="report-row"><span>${c.code}</span><span>${c.desc||''}</span></div>`).join('') || '<div class="report-row"><span>No codes logged</span><span></span></div>';
+
+    const photoRows = Object.entries(d.photoCounts)
+      .map(([cat,count]) => `<div class="report-row"><span style="text-transform:capitalize;">${cat}</span><span>${count} photo${count===1?'':'s'}</span></div>`)
+      .join('');
 
     document.getElementById('report-date-line').textContent =
       (d.vehicle.year||'') + ' ' + (d.vehicle.make||'') + ' ' + (d.vehicle.model||'') + ' · ' + (d.vehicle.date || '');
@@ -671,6 +715,12 @@
         <div class="legend"><span>OBD-II</span></div>
         <div class="report-row"><span>Status</span><span>${d.obd.status||'—'}</span></div>
         ${codesHtml}
+        ${d.obd.notes ? `<div style="font-size:12.5px;color:var(--dim);margin-top:6px;">${d.obd.notes}</div>` : ''}
+      </fieldset>
+      ${sectionsHtml}
+      <fieldset>
+        <div class="legend"><span>Photos</span></div>
+        ${photoRows || '<div class="report-row"><span>No photos attached</span><span></span></div>'}
       </fieldset>
       <fieldset>
         <div class="legend"><span>Inspector Notes</span></div>
