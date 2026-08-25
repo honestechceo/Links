@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Honestech Mobile Mechanic — Links (B&W Inverted)</title>
+<title>Honestech Mobile Mechanic — Links</title>
 <meta name="description" content="Honestech Mobile Mechanic — we come to you. Call, text, or book a service.">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="googlebot" content="noindex, nofollow">
@@ -33,22 +33,22 @@
 
 <style>
   :root{
-    --bg:#F2F2F2;
-    --panel:#FFFFFF;
-    --grid:#D6D6D6;
-    --phosphor:#0A0A0A;
-    --phosphor-dim:#5A5A5A;
-    --amber:#3A3A3A;
-    --alert:#000000;
-    --text:#141414;
-    --text-dim:#8A8A8A;
+    --bg:#0A0D0C;
+    --panel:#0F1513;
+    --grid:#1C2523;
+    --phosphor:#39FFB0;
+    --phosphor-dim:#1F8F63;
+    --amber:#FFB020;
+    --alert:#FF4D4D;
+    --text:#DCEFE7;
+    --text-dim:#6C8B80;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
 
   body{
     background:
-      radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.04), transparent 55%),
+      radial-gradient(ellipse at 50% 0%, rgba(57,255,176,0.06), transparent 55%),
       var(--bg);
     min-height:100vh;
     display:flex; justify-content:center; align-items:flex-start;
@@ -60,10 +60,10 @@
   .screen-wrap{ width:100%; max-width:440px; }
 
   .bezel{
-    background:linear-gradient(155deg,#EDEDED,#D2D2D2);
+    background:linear-gradient(155deg,#181f1d,#0c1210);
     border-radius:14px;
     padding:8px;
-    box-shadow:0 24px 60px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+    box-shadow:0 30px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
   .screen{
@@ -74,14 +74,14 @@
     padding:22px 18px 20px;
     background-image:
       linear-gradient(var(--panel),var(--panel)),
-      repeating-linear-gradient(180deg, rgba(0,0,0,0.035) 0 1px, transparent 1px 3px);
+      repeating-linear-gradient(180deg, rgba(57,255,176,0.025) 0 1px, transparent 1px 3px);
   }
   /* scanline sweep, plays once on load */
   .screen::before{
     content:"";
     position:absolute; left:0; right:0; top:0;
     height:40%;
-    background:linear-gradient(180deg, rgba(0,0,0,0.08), transparent);
+    background:linear-gradient(180deg, rgba(57,255,176,0.10), transparent);
     animation:sweep 1.4s ease-out 1;
     pointer-events:none;
   }
@@ -100,7 +100,7 @@
   }
   .topbar .live{ display:flex; align-items:center; gap:6px; color:var(--phosphor); }
   .led{ width:6px; height:6px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 6px var(--phosphor); animation:blink 1.8s infinite; }
-  .led.off{ background:var(--alert); box-shadow:0 0 6px rgba(0,0,0,0.4); animation:none; border:1px solid #FFF; }
+  .led.off{ background:var(--alert); box-shadow:0 0 6px var(--alert); animation:none; }
   @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
   @media (prefers-reduced-motion: reduce){ .led{ animation:none; } }
 
@@ -138,7 +138,7 @@
   .row{
     display:flex; align-items:center; gap:12px;
     text-decoration:none; color:var(--text);
-    background:#FFFFFF;
+    background:#0C1210;
     border:1px solid var(--grid);
     border-radius:4px;
     padding:12px 13px;
@@ -146,11 +146,11 @@
   }
   .row:hover, .row:focus-visible{
     border-color:var(--phosphor-dim);
-    background:#F0F0F0;
+    background:#0F1815;
     transform:translateX(2px);
     outline:none;
   }
-  .row.primary{ border-color:var(--phosphor-dim); background:#E9E9E9; }
+  .row.primary{ border-color:var(--phosphor-dim); background:#0D1A15; }
   .row.primary:hover{ border-color:var(--phosphor); }
 
   .code{
@@ -233,7 +233,7 @@
 
         <a class="row" id="link-book" href="#">
           <span class="code">AI-Q</span>
-          <span class="rlabel"><span class="l">Get a quote / book</span><span class="s" id="ai-sub">Text (848) 375-0431 · AI-assisted</span></span>
+          <span class="rlabel"><span class="l">Get a quote / book</span><span class="s" id="ai-sub">Call (848) 375-0431 · AI-assisted</span></span>
           <span class="chevron">›</span>
         </a>
         <p class="note">Submitting a request online? Check your spam folder for our reply.</p>
@@ -281,8 +281,8 @@
   document.getElementById('phone-sub').textContent = C.phoneDisplay;
   document.getElementById('link-text').href = 'sms:' + C.smsTel;
   document.getElementById('text-sub').textContent = C.phoneDisplay;
-  document.getElementById('link-book').href = 'sms:' + C.aiTel;
-  document.getElementById('ai-sub').textContent = 'Text ' + C.aiDisplay + ' · AI-assisted';
+  document.getElementById('link-book').href = 'tel:' + C.aiTel;
+  document.getElementById('ai-sub').textContent = 'Call ' + C.aiDisplay + ' · AI-assisted';
   document.getElementById('link-review').href = C.googleReviewUrl;
   document.getElementById('link-fb').href = C.facebookUrl;
   document.getElementById('link-ig').href = C.instagramUrl;
