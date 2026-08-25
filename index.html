@@ -7,6 +7,7 @@
 <meta name="description" content="Honestech Mobile Mechanic — we come to you. Call, text, or book a service.">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="googlebot" content="noindex, nofollow">
+
 <!-- ============================================================
   EDIT ME: business info + links live in one place below.
 ============================================================= -->
@@ -21,7 +22,7 @@
     facebookUrl: "https://www.facebook.com/share/1DKwj73Skz/?mibextid=wwXIfr",
     instagramUrl: "https://www.instagram.com/honestech_service?igsi=cnkwNzdvZmV2b3pm",
     tiktokUrl: "https://www.tiktok.com/@honestech.mobile?_r=1&_t=ZT-9962awtZWlK",
-    hoursText: "MON–SAT 08:00–17:00 · SUN CLOSED",
+    hoursText: "MON–SAT 8AM–5PM · SUN CLOSED",
     openDays: [1,2,3,4,5,6],
     openHour: 8,
     closeHour: 17
@@ -29,249 +30,254 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --bg:#0A0D0C;
-    --panel:#0F1513;
-    --grid:#1C2523;
-    --phosphor:#39FFB0;
-    --phosphor-dim:#1F8F63;
-    --amber:#FFB020;
-    --alert:#FF4D4D;
-    --text:#DCEFE7;
-    --text-dim:#6C8B80;
+    --steel-dark:#1B1D1E;
+    --steel-mid:#2B2E30;
+    --steel-hi:#3E4245;
+    --edge:#0D0E0F;
+    --yellow:#F5C800;
+    --white:#F0EFEA;
+    --dim:#9A9C97;
+    --green:#3FA34D;
+    --red:#D93A2B;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
 
   body{
     background:
-      radial-gradient(ellipse at 50% 0%, rgba(57,255,176,0.06), transparent 55%),
-      var(--bg);
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 6px),
+      radial-gradient(ellipse at 50% -10%, #2a2c2d, #101112 65%);
     min-height:100vh;
-    display:flex; justify-content:center; align-items:flex-start;
-    padding:44px 16px 70px;
-    font-family:'IBM Plex Mono',monospace;
-    color:var(--text);
+    display:flex; justify-content:center;
+    padding:0 0 60px;
+    font-family:'Inter',sans-serif;
+    color:var(--white);
   }
 
-  .screen-wrap{ width:100%; max-width:440px; }
+  .sheet{ width:100%; max-width:440px; }
 
-  .bezel{
-    background:linear-gradient(155deg,#181f1d,#0c1210);
-    border-radius:14px;
-    padding:8px;
-    box-shadow:0 30px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+  .hazard{
+    height:12px;
+    background:repeating-linear-gradient(45deg, var(--yellow) 0 12px, #16171A 12px 24px);
   }
 
-  .screen{
+  .content{ padding:18px 14px 0; }
+
+  /* ---- header plate ---- */
+  .plate{
     position:relative;
-    background:var(--panel);
-    border-radius:8px;
-    overflow:hidden;
-    padding:22px 18px 20px;
-    background-image:
-      linear-gradient(var(--panel),var(--panel)),
-      repeating-linear-gradient(180deg, rgba(57,255,176,0.025) 0 1px, transparent 1px 3px);
+    background:linear-gradient(160deg, var(--steel-hi), var(--steel-mid) 55%, var(--steel-dark));
+    border:1px solid var(--edge);
+    border-radius:6px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+    padding:20px 18px 16px;
+    margin-bottom:14px;
   }
-  /* scanline sweep, plays once on load */
-  .screen::before{
-    content:"";
-    position:absolute; left:0; right:0; top:0;
-    height:40%;
-    background:linear-gradient(180deg, rgba(57,255,176,0.10), transparent);
-    animation:sweep 1.4s ease-out 1;
-    pointer-events:none;
+  .rivet{
+    position:absolute; width:9px; height:9px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #8a8d90, #303336);
+    box-shadow:0 1px 2px rgba(0,0,0,0.6), inset 0 0 1px rgba(255,255,255,0.3);
   }
-  @keyframes sweep{
-    from{ transform:translateY(-100%); }
-    to{ transform:translateY(250%); }
-  }
-  @media (prefers-reduced-motion: reduce){ .screen::before{ animation:none; } }
+  .rivet.tl{ top:9px; left:9px; } .rivet.tr{ top:9px; right:9px; }
+  .rivet.bl{ bottom:9px; left:9px; } .rivet.br{ bottom:9px; right:9px; }
 
-  .topbar{
-    display:flex; justify-content:space-between; align-items:center;
-    font-size:10.5px; letter-spacing:0.08em;
-    color:var(--text-dim);
-    border-bottom:1px solid var(--grid);
-    padding-bottom:10px; margin-bottom:16px;
+  .plate h1{
+    font-family:'Oswald',sans-serif; font-weight:700;
+    font-size:clamp(26px,7vw,32px); text-transform:uppercase;
+    letter-spacing:0.02em; line-height:1.05; margin:0 0 2px;
+    color:var(--white);
+    text-shadow:0 1px 0 rgba(0,0,0,0.6), 0 -1px 0 rgba(255,255,255,0.05);
   }
-  .topbar .live{ display:flex; align-items:center; gap:6px; color:var(--phosphor); }
-  .led{ width:6px; height:6px; border-radius:50%; background:var(--phosphor); box-shadow:0 0 6px var(--phosphor); animation:blink 1.8s infinite; }
-  .led.off{ background:var(--alert); box-shadow:0 0 6px var(--alert); animation:none; }
-  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
-  @media (prefers-reduced-motion: reduce){ .led{ animation:none; } }
+  .plate h1 span{ color:var(--yellow); }
+  .plate .tagline{ font-size:13px; color:var(--dim); margin:2px 0 10px; }
 
-  .brand{ margin-bottom:4px; }
-  .brand .name{
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    font-size:clamp(24px,6.5vw,28px);
-    letter-spacing:0.01em;
-    color:var(--text);
-    line-height:1.1;
-  }
-  .brand .name em{ color:var(--phosphor); font-style:normal; }
-  .brand .sub{
-    font-size:11.5px; color:var(--text-dim); margin-top:4px;
+  .asset-tag{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--dim);
+    letter-spacing:0.05em; border-top:1px dashed #45494c; padding-top:8px;
+    display:flex; justify-content:space-between;
   }
 
-  .readout{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:1px;
-    background:var(--grid);
-    border:1px solid var(--grid);
-    border-radius:4px;
-    margin:16px 0 18px;
-    overflow:hidden;
+  /* ---- status panel ---- */
+  .status-panel{
+    display:flex; align-items:center; gap:10px;
+    background:var(--steel-dark);
+    border:1px solid var(--edge);
+    border-radius:6px;
+    padding:10px 14px;
+    margin-bottom:16px;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
   }
-  .cell{ background:var(--panel); padding:9px 10px; }
-  .cell .k{ font-size:9px; color:var(--text-dim); letter-spacing:0.08em; display:block; }
-  .cell .v{ font-size:12px; color:var(--phosphor); margin-top:2px; display:block; }
-  .cell .v.amber{ color:var(--amber); }
+  .lamp-bezel{
+    width:20px; height:20px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #55585B, #202224);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    box-shadow:inset 0 0 2px rgba(0,0,0,0.7);
+  }
+  .lamp{ width:10px; height:10px; border-radius:50%; background:var(--green); box-shadow:0 0 8px 2px rgba(63,163,77,0.7); }
+  .lamp.off{ background:var(--red); box-shadow:0 0 8px 2px rgba(217,58,43,0.7); }
+  .status-text{ font-family:'Oswald',sans-serif; font-weight:600; font-size:14px; letter-spacing:0.04em; text-transform:uppercase; }
+  .status-text .hrs{ display:block; font-family:'IBM Plex Mono',monospace; font-weight:400; font-size:10.5px; color:var(--dim); text-transform:none; letter-spacing:0.02em; margin-top:1px; }
 
-  .links{ display:flex; flex-direction:column; gap:8px; }
+  /* ---- link placards ---- */
+  .links{ display:flex; flex-direction:column; gap:9px; }
 
   .row{
+    position:relative;
     display:flex; align-items:center; gap:12px;
-    text-decoration:none; color:var(--text);
-    background:#0C1210;
-    border:1px solid var(--grid);
-    border-radius:4px;
-    padding:12px 13px;
-    transition:border-color .15s ease, background .15s ease, transform .15s ease;
+    text-decoration:none; color:var(--white);
+    background:linear-gradient(160deg, var(--steel-hi), var(--steel-mid));
+    border:1px solid var(--edge);
+    border-radius:5px;
+    padding:12px 14px 12px 16px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+    transition:transform .12s ease, box-shadow .12s ease;
+    overflow:hidden;
+  }
+  .row::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:5px;
+    background:var(--yellow);
   }
   .row:hover, .row:focus-visible{
-    border-color:var(--phosphor-dim);
-    background:#0F1815;
     transform:translateX(2px);
+    box-shadow:0 6px 14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
     outline:none;
   }
-  .row.primary{ border-color:var(--phosphor-dim); background:#0D1A15; }
-  .row.primary:hover{ border-color:var(--phosphor); }
 
-  .code{
-    font-size:10px; color:var(--text-dim);
-    min-width:44px; flex-shrink:0;
+  .badge{
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    background:radial-gradient(circle at 35% 30%, #4A4E51, #202224);
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px;
+    border:1px solid #101112;
+    box-shadow:inset 0 0 2px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.05);
   }
-  .row.primary .code{ color:var(--phosphor-dim); }
 
-  .rlabel{ flex:1; min-width:0; font-family:'Space Grotesk',sans-serif; }
-  .rlabel .l{ font-size:14px; font-weight:600; display:block; }
-  .rlabel .s{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-dim); display:block; margin-top:2px; }
+  .rlabel{ flex:1; min-width:0; }
+  .rlabel .l{
+    font-family:'Oswald',sans-serif; font-weight:600; font-size:15px;
+    text-transform:uppercase; letter-spacing:0.02em; display:block;
+    text-shadow:0 1px 0 rgba(0,0,0,0.5);
+  }
+  .rlabel .s{ font-size:11.5px; color:var(--dim); display:block; margin-top:1px; }
 
-  .chevron{ color:var(--text-dim); font-size:13px; flex-shrink:0; transition:transform .15s ease, color .15s ease; }
-  .row:hover .chevron{ color:var(--phosphor); transform:translateX(3px); }
+  .chevron{ color:var(--dim); font-size:16px; flex-shrink:0; }
+  .row:hover .chevron{ color:var(--yellow); }
 
   .note{
-    font-size:10px; color:var(--text-dim); text-align:center;
-    margin:2px 0 12px; line-height:1.5;
+    font-size:10.5px; color:var(--dim); text-align:center;
+    margin:2px 4px 10px; line-height:1.5;
   }
 
-  .area-block{
-    border:1px solid var(--grid); border-radius:4px;
-    padding:12px 13px; margin-bottom:8px;
+  .area-plate{
+    background:linear-gradient(160deg, var(--steel-hi), var(--steel-mid));
+    border:1px solid var(--edge); border-radius:5px;
+    padding:12px 14px; margin-top:2px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
   }
-  .area-block .code{ display:block; margin-bottom:6px; }
-  .area-line{ font-size:11.5px; color:var(--text); margin:2px 0; line-height:1.5; }
-  .area-line .tag{ color:var(--phosphor); font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:11px; }
-  .area-line .tag.amber{ color:var(--amber); }
+  .area-plate .head{
+    font-family:'Oswald',sans-serif; font-weight:600; font-size:11.5px;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--yellow);
+    margin-bottom:6px;
+  }
+  .area-line{ font-size:11.5px; color:var(--white); margin:3px 0; line-height:1.5; }
+  .area-line .dot{ display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; }
+  .area-line .dot.green{ background:var(--green); box-shadow:0 0 6px rgba(63,163,77,0.7); }
+  .area-line .dot.amber{ background:var(--yellow); box-shadow:0 0 6px rgba(245,200,0,0.6); }
 
-  .footline{
-    text-align:center; font-size:9.5px; letter-spacing:0.1em;
-    color:var(--text-dim); margin-top:16px;
+  .footer{ padding:18px 14px 0; text-align:center; }
+  .footer a{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.08em;
+    color:var(--dim); text-decoration:none; text-transform:uppercase;
   }
-  .footline a{ color:inherit; text-decoration:none; }
-  .footline a:hover{ color:var(--phosphor); }
+  .footer a:hover{ color:var(--yellow); }
 
   @media (max-width:380px){
-    .screen{ padding:18px 14px 16px; }
+    .plate{ padding:16px 14px 14px; }
   }
 </style>
 </head>
 <body>
 
-<div class="screen-wrap">
-  <div class="bezel">
-    <div class="screen">
-      <div class="topbar">
-        <span>HONESTECH · DIAG LINK v1</span>
-        <span class="live"><span class="led" id="status-led"></span><span id="status-text">ONLINE</span></span>
-      </div>
+<div class="sheet">
+  <div class="hazard"></div>
 
-      <div class="brand">
-        <div class="name">Honestech<br><em>Mobile Mechanic</em></div>
-        <div class="sub">We come to you — repair &amp; maintenance, on-site.</div>
-      </div>
-
-      <div class="readout">
-        <div class="cell">
-          <span class="k">STATUS</span>
-          <span class="v" id="status-cell">CHECKING…</span>
-        </div>
-        <div class="cell">
-          <span class="k">HOURS</span>
-          <span class="v">MON–SAT 8–5</span>
-        </div>
-      </div>
-
-      <div class="links">
-        <a class="row primary" id="link-call" href="#">
-          <span class="code">CALL</span>
-          <span class="rlabel"><span class="l">Call now</span><span class="s" id="phone-sub">(732) 937-3734</span></span>
-          <span class="chevron">›</span>
-        </a>
-
-        <a class="row" id="link-text" href="#">
-          <span class="code">TEXT</span>
-          <span class="rlabel"><span class="l">Text us directly</span><span class="s" id="text-sub">(732) 937-3734</span></span>
-          <span class="chevron">›</span>
-        </a>
-
-        <a class="row" id="link-book" href="#">
-          <span class="code">AI-Q</span>
-          <span class="rlabel"><span class="l">Get a quote / book</span><span class="s" id="ai-sub">Call (848) 375-0431 · AI-assisted</span></span>
-          <span class="chevron">›</span>
-        </a>
-        <p class="note">Submitting a request online? Check your spam folder for our reply.</p>
-
-        <a class="row" id="link-review" href="#" target="_blank" rel="noopener">
-          <span class="code">RVW</span>
-          <span class="rlabel"><span class="l">Leave a Google review</span><span class="s">Tell the next customer how it went</span></span>
-          <span class="chevron">›</span>
-        </a>
-
-        <a class="row" id="link-fb" href="#" target="_blank" rel="noopener">
-          <span class="code">FB</span>
-          <span class="rlabel"><span class="l">Facebook</span><span class="s">Photos from the bay &amp; updates</span></span>
-          <span class="chevron">›</span>
-        </a>
-
-        <a class="row" id="link-ig" href="#" target="_blank" rel="noopener">
-          <span class="code">IG</span>
-          <span class="rlabel"><span class="l">Instagram</span><span class="s">Before / after jobs</span></span>
-          <span class="chevron">›</span>
-        </a>
-
-        <a class="row" id="link-tt" href="#" target="_blank" rel="noopener">
-          <span class="code">TT</span>
-          <span class="rlabel"><span class="l">TikTok</span><span class="s">Shop talk &amp; quick clips</span></span>
-          <span class="chevron">›</span>
-        </a>
-
-        <div class="area-block">
-          <span class="code">AREA</span>
-          <div class="area-line"><span class="tag">● ACTIVE</span> — Middlesex County</div>
-          <div class="area-line"><span class="tag amber">● LIMITED</span> — Monmouth &amp; Ocean County, subject to availability, may be referred to a nearby mechanic</div>
-        </div>
-      </div>
-
-      <div class="footline"><a href="https://honestechmobilemechanic.com" target="_blank" rel="noopener">HONESTECHMOBILEMECHANIC.COM</a></div>
+  <div class="content">
+    <div class="plate">
+      <span class="rivet tl"></span><span class="rivet tr"></span>
+      <span class="rivet bl"></span><span class="rivet br"></span>
+      <h1>Honestech<br><span>Mobile Mechanic</span></h1>
+      <p class="tagline">We come to you — repair &amp; maintenance, on-site.</p>
+      <div class="asset-tag"><span>UNIT NO. 0473</span><span id="asset-date">—</span></div>
     </div>
+
+    <div class="status-panel">
+      <span class="lamp-bezel"><span class="lamp" id="status-lamp"></span></span>
+      <span class="status-text">
+        <span id="status-text">CHECKING</span>
+        <span class="hrs" id="hrs-text">MON–SAT 8AM–5PM</span>
+      </span>
+    </div>
+
+    <div class="links">
+      <a class="row" id="link-call" href="#">
+        <span class="badge">📞</span>
+        <span class="rlabel"><span class="l">Call now</span><span class="s" id="phone-sub">(732) 937-3734</span></span>
+        <span class="chevron">›</span>
+      </a>
+
+      <a class="row" id="link-text" href="#">
+        <span class="badge">💬</span>
+        <span class="rlabel"><span class="l">Text us directly</span><span class="s" id="text-sub">(732) 937-3734</span></span>
+        <span class="chevron">›</span>
+      </a>
+
+      <a class="row" id="link-book" href="#">
+        <span class="badge">🔧</span>
+        <span class="rlabel"><span class="l">Get a quote / book</span><span class="s" id="ai-sub">Call (848) 375-0431 · AI-assisted</span></span>
+        <span class="chevron">›</span>
+      </a>
+      <p class="note">Submitting a request online? Check your spam folder for our reply.</p>
+
+      <a class="row" id="link-review" href="#" target="_blank" rel="noopener">
+        <span class="badge">⭐</span>
+        <span class="rlabel"><span class="l">Google review</span><span class="s">Tell the next customer how it went</span></span>
+        <span class="chevron">›</span>
+      </a>
+
+      <a class="row" id="link-fb" href="#" target="_blank" rel="noopener">
+        <span class="badge">📘</span>
+        <span class="rlabel"><span class="l">Facebook</span><span class="s">Photos from the bay &amp; updates</span></span>
+        <span class="chevron">›</span>
+      </a>
+
+      <a class="row" id="link-ig" href="#" target="_blank" rel="noopener">
+        <span class="badge">📸</span>
+        <span class="rlabel"><span class="l">Instagram</span><span class="s">Before / after jobs</span></span>
+        <span class="chevron">›</span>
+      </a>
+
+      <a class="row" id="link-tt" href="#" target="_blank" rel="noopener">
+        <span class="badge">🎵</span>
+        <span class="rlabel"><span class="l">TikTok</span><span class="s">Shop talk &amp; quick clips</span></span>
+        <span class="chevron">›</span>
+      </a>
+
+      <div class="area-plate">
+        <div class="head">Service Area</div>
+        <div class="area-line"><span class="dot green"></span>Middlesex County — currently servicing</div>
+        <div class="area-line"><span class="dot amber"></span>Monmouth &amp; Ocean County — subject to availability, may be referred to a nearby mechanic</div>
+      </div>
+    </div>
+
+    <div class="footer"><a href="https://honestechmobilemechanic.com" target="_blank" rel="noopener">honestechmobilemechanic.com</a></div>
   </div>
+
+  <div class="hazard" style="margin-top:18px;"></div>
 </div>
 
 <script>
@@ -287,26 +293,26 @@
   document.getElementById('link-fb').href = C.facebookUrl;
   document.getElementById('link-ig').href = C.instagramUrl;
   document.getElementById('link-tt').href = C.tiktokUrl;
+  document.getElementById('hrs-text').textContent = C.hoursText;
 
-  // Live open/closed status
+  const d = new Date();
+  document.getElementById('asset-date').textContent =
+    (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();
+
   (function(){
     const now = new Date();
     const day = now.getDay();
     const hour = now.getHours() + now.getMinutes()/60;
     const isOpen = C.openDays.includes(day) && hour >= C.openHour && hour < C.closeHour;
 
-    const led = document.getElementById('status-led');
-    const topText = document.getElementById('status-text');
-    const cell = document.getElementById('status-cell');
+    const lamp = document.getElementById('status-lamp');
+    const text = document.getElementById('status-text');
 
     if(isOpen){
-      topText.textContent = 'ONLINE';
-      cell.textContent = 'OPEN NOW';
+      text.textContent = 'OPERATIONAL';
     } else {
-      led.classList.add('off');
-      topText.textContent = 'OFFLINE';
-      cell.textContent = 'CLOSED';
-      cell.classList.add('amber');
+      lamp.classList.add('off');
+      text.textContent = 'OFFLINE';
     }
   })();
 </script>
